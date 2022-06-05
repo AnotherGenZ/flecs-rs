@@ -14,26 +14,28 @@ fn main() {
     // when you specify wasm32-unknown-emscripten.
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap().to_string();
     if target_os == EM_OS {
-      // Export as JS file as ES6 Module by adding emscripten flag
-      println!("cargo:rustc-link-arg=-sEXPORT_ES6=1");
-      println!("cargo:rustc-link-arg=-sMODULARIZE=1");
+        // Export as JS file as ES6 Module by adding emscripten flag
+        println!("cargo:rustc-link-arg=-sEXPORT_ES6=1");
+        println!("cargo:rustc-link-arg=-sMODULARIZE=1");
     }
 
     // Standard library include path
     // To support all platforms we should use the emsdk sysroot itself for the include path.
-    let emsdk = env::var("EMSDK").unwrap();
+    /*let emsdk = env::var("EMSDK").unwrap();
     let emsdk_include_path = format!("{}/upstream/emscripten/cache/sysroot/include", emsdk);
-    let include_path = env::var("STDLIB").unwrap_or(emsdk_include_path.to_string()).to_string();
-    let include_flag = String::from("-I") + &include_path[..include_path.len()];
-    println!("Used Include Path: {}", include_path);
+    let include_path = env::var("STDLIB")
+        .unwrap_or(emsdk_include_path.to_string())
+        .to_string();
+    let include_flag = String::from("-I") + &include_path[..include_path.len()];*/
+    //println!("Used Include Path: {}", include_path);
 
     let bindings = bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
-        .header("flecs.h")
+        .header("vendor/flecs/flecs.h")
         // Nessecary for Emscripten target.
-        .clang_arg("-fvisibility=default")
-        .clang_arg(include_flag)
+        //.clang_arg("-fvisibility=default")
+        //.clang_arg(include_flag)
         .generate_comments(false)
         .layout_tests(false)
         // Tell cargo to invalidate the built crate whenever any of the
@@ -52,6 +54,6 @@ fn main() {
 
     // Compile flecs C right into our Rust crate
     cc::Build::new()
-      .file("flecs.c")
-      .compile("flecs");		
+        .file("vendor/flecs/flecs.c")
+        .compile("flecs");
 }

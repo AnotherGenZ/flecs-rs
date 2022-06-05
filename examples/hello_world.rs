@@ -5,34 +5,35 @@ use flecs::*;
 
 #[derive(Copy, Clone, Default, Debug, PartialEq)]
 struct Position {
-	x: f32,
-	y: f32,
+    x: f32,
+    y: f32,
 }
 
 #[derive(Copy, Clone, Default, Debug, PartialEq)]
 struct Velocity {
-	x: f32,
-	y: f32,
+    x: f32,
+    y: f32,
 }
 
 // Tag types
-struct Eats { }
-struct Apples { }
+struct Eats {}
+struct Apples {}
 
 fn main() {
-	println!("Hello World starting...");
+    println!("Hello World starting...");
 
-	let mut world = World::new();
+    let mut world = World::new();
 
     // We have to manually register all components
-	world.component_named::<Position>("Position");
-	world.component_named::<Velocity>("Velocity");
-	world.component::<Eats>();
-	world.component::<Apples>();
+    world.component_named::<Position>("Position");
+    world.component_named::<Velocity>("Velocity");
+    world.component::<Eats>();
+    world.component::<Apples>();
 
-	world.system::<(Position, Velocity)>()
-		.expr("Position, Velocity")
-		.each(|e, (pos, vel)| {
+    world
+        .system::<(Position, Velocity)>()
+        .expr("Position, Velocity")
+        .each(|e, (pos, vel)| {
             println!("  {}: {:?}, {:?}", e.name(), pos, vel);
         });
 
@@ -44,7 +45,9 @@ fn main() {
     //     });
 
     // Create an entity with name Bob, add Position and food preference
-    let bob = world.entity().named("Bob")
+    let bob = world
+        .entity()
+        .named("Bob")
         .set(Position { x: 0.0, y: 0.0 })
         .set(Velocity { x: 1.0, y: 2.0 })
         .add_relation::<Eats, Apples>();

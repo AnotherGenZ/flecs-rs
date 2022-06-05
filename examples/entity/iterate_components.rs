@@ -2,22 +2,22 @@ use flecs::*;
 
 #[derive(Copy, Clone, Default, Debug, PartialEq)]
 struct Position {
-	x: f32,
-	y: f32,
+    x: f32,
+    y: f32,
 }
 
 #[derive(Copy, Clone, Default, Debug, PartialEq)]
 struct Velocity {
-	x: f32,
-	y: f32,
+    x: f32,
+    y: f32,
 }
 
 // Tag
 struct Human {}
 
 // Two tags used to create a pair
-struct Eats { }
-struct Apples { }
+struct Eats {}
+struct Apples {}
 
 fn iterate_components(e: Entity) {
     // 1. The easiest way to print the components is to use type::str
@@ -36,7 +36,6 @@ fn iterate_components(e: Entity) {
     // // encoded in an id, but provides the most flexibility.
     i = 0;
     e.each(|id| {
-
         if id.has_role() {
             print!("{}: role: {}, ", i, id.role().role_str());
         }
@@ -58,20 +57,21 @@ fn iterate_components(e: Entity) {
 }
 
 fn main() {
-	println!("Entity Iterate Components starting...");
+    println!("Entity Iterate Components starting...");
 
-	let mut world = World::new();
+    let mut world = World::new();
 
     // We have to manually register all components
-	world.component::<Position>();
-	world.component::<Velocity>();
-	world.component::<Human>();
-	world.component::<Eats>();
-	world.component::<Apples>();
+    world.component::<Position>();
+    world.component::<Velocity>();
+    world.component::<Human>();
+    world.component::<Eats>();
+    world.component::<Apples>();
 
-    let bob = world.entity()
-        .set::<Position>(Position {x: 10.0, y: 20.0 })
-        .set::<Velocity>(Velocity {x: 1.0 , y: 1.0 })
+    let bob = world
+        .entity()
+        .set::<Position>(Position { x: 10.0, y: 20.0 })
+        .set::<Velocity>(Velocity { x: 1.0, y: 1.0 })
         .add::<Human>()
         .add_relation::<Eats, Apples>();
 
@@ -97,7 +97,6 @@ fn main() {
 // 1: entity: Velocity
 // 2: entity: Human
 // 3: role: PAIR, rel: Eats, obj: Eats
-
 
 // Position's components:
 // ecs_type_str: EcsComponent,(Identifier,Name),(Identifier,Symbol),(OnDelete,Throw)

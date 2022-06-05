@@ -3,8 +3,8 @@ use crate::Component;
 
 lazy_static::lazy_static! {
     pub(crate) static ref NAME_SEP: std::ffi::CString = {
-		let sep = std::ffi::CString::new("::").unwrap();
-		sep
+        let sep = std::ffi::CString::new("::").unwrap();
+        sep
     };
 }
 
@@ -12,31 +12,31 @@ lazy_static::lazy_static! {
 // Impl some flecs Macro like functions that do not bindgen
 
 pub unsafe fn ecs_term_id(it: *const ecs_iter_t, index: i32) -> ecs_id_t {
-    assert!(index > 0);		// TODO: later add max check as well
+    assert!(index > 0); // TODO: later add max check as well
     let index = (index - 1) as usize;
     let term_id = (*it).ids.add(index);
     *term_id
 }
 
 pub unsafe fn ecs_term_source(it: *const ecs_iter_t, index: i32) -> ecs_entity_t {
-    assert!(index > 0);		// TODO: later add max check as well
+    assert!(index > 0); // TODO: later add max check as well
     if (*it).subjects.is_null() {
         0
     } else {
         let index = (index - 1) as usize;
         *((*it).subjects.add(index))
-    } 
+    }
 }
 
 pub unsafe fn ecs_term_size(it: *const ecs_iter_t, index: i32) -> size_t {
-    assert!(index > 0);		// TODO: later add max check as well
+    assert!(index > 0); // TODO: later add max check as well
     *((*it).sizes.add((index - 1) as usize)) as size_t
 }
 
-// For some reason this flecs C function is missing within linker so had to 
+// For some reason this flecs C function is missing within linker so had to
 // reimplement, needs a new name too I guess.
 pub unsafe fn ecs_term_is_owned2(it: *const ecs_iter_t, index: i32) -> bool {
-    assert!(index > 0);		// TODO: later add max check as well
+    assert!(index > 0); // TODO: later add max check as well
     let index = (index - 1) as usize;
     (*it).subjects.is_null() || *((*it).subjects.add(index)) == 0
 }
